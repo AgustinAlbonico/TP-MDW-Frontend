@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { PublicRoutes } from "../models/routes";
+import { PublicRoutes } from "../models/routes.model";
 
 const AuthGuard = () => {
   let userLogged: boolean = true;

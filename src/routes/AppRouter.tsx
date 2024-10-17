@@ -1,6 +1,6 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import { lazy } from "react";
-import { PrivateRoutes, PublicRoutes } from "../models/routes";
+import { PrivateRoutes, PublicRoutes } from "../models/routes.model";
 import AuthGuard from "../guards/auth.guard";
 import NotFound from "../pages/NotFound/NotFound";
 

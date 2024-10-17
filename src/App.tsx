@@ -13,7 +13,7 @@ const App = () => {
           </main>
         }
       >
-        <main className="h-screen w-full flex justify-center items-center">
+        <main className="">
           <AppRouter />
         </main>
         <ToastContainer />
