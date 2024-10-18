@@ -2,21 +2,27 @@ import { forwardRef, HTMLProps, Ref, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 interface FieldProps extends HTMLProps<HTMLInputElement> {
-  type: "email" | "password" | "text";
+  type: "email" | "password" | "text" | "date" | "file";
   error?: string;
-}
+} 
 
 const Input = forwardRef((props: FieldProps, ref: Ref<HTMLInputElement>) => {
-  const { error, type, ...FieldProps } = props;
+  const { placeholder, error, type, ...FieldProps } = props;
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
-      <div className="flex items-center bg-transparent border-[1.5px] px-5 rounded mb-3">
+      <div
+        className={`flex items-center bg-transparent border-[1.5px] px-5 rounded mb-3 ${
+          type === "file" && "cursor-pointer"
+        }`}
+      >
         <input
           type={type !== "password" ? type : !showPassword ? type : "text"}
-          placeholder={type.charAt(0).toUpperCase() + type.slice(1)}
-          className="w-full text-sm bg-transparent py-3 mr-3 rounded outline-none"
+          placeholder={placeholder}
+          className={`w-full text-sm bg-transparent py-3 mr-3 rounded outline-none bg-black${
+            type === "file" || type === "date" && "cursor-pointer"
+          }`}
           ref={ref}
           {...FieldProps}
         />
