@@ -36,7 +36,7 @@ const Login = () => {
           <div className="w-96 border rounded bg-white px-7 py-10">
             <form onSubmit={handleSubmit(submitData)}>
               <h4 className="text-2xl mb-7">Login</h4>
-              <Input type="email" {...register("email")}></Input>
+              <Input type="email" {...register("email")} error={errors.email?.message}></Input>
               {/* 
                 Cambie este input por un componente separado
                 <input
@@ -46,7 +46,7 @@ const Login = () => {
                 {...register("email")}
               /> */}
 
-              <Field type="password" {...register("password")}></Field>
+              <Field type="password" {...register("password")} error={errors.password?.message}></Field>
 
               {/* <input
                 type="password"
