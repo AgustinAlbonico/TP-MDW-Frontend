@@ -8,6 +8,8 @@ import Navbar from "../../components/Navbar";
 import LoginSchema from "../../models/schemas/login.model";
 import Field from "../../components/InputField";
 import Input from "../../components/InputField";
+import CustomLoginButton from "../../components/CustomLogin";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const loginValidation: ZodType<LoginSchema> = z.object({
@@ -36,7 +38,12 @@ const Login = () => {
           <div className="w-96 border rounded bg-white px-7 py-10">
             <form onSubmit={handleSubmit(submitData)}>
               <h4 className="text-2xl mb-7">Login</h4>
-              <Input type="email" {...register("email")} error={errors.email?.message} placeholder="Email"></Input>
+              <Input
+                type="email"
+                {...register("email")}
+                error={errors.email?.message}
+                placeholder="Email"
+              ></Input>
               {/* 
                 Cambie este input por un componente separado
                 <input
@@ -46,7 +53,12 @@ const Login = () => {
                 {...register("email")}
               /> */}
 
-              <Field type="password" {...register("password")} error={errors.password?.message} placeholder="Contraseña"></Field>
+              <Field
+                type="password"
+                {...register("password")}
+                error={errors.password?.message}
+                placeholder="Contraseña"
+              ></Field>
 
               {/* <input
                 type="password"
@@ -59,17 +71,27 @@ const Login = () => {
                 Iniciar sesión
               </button>
 
-              <p className="text-sm text-center mt-4">
-                No tenes cuenta?{" "}
-                <Link
-                  to={`/${PublicRoutes.REGISTER}`}
-                  replace
-                  className="text-primary"
-                >
-                  Registrate!
-                </Link>
-              </p>
+              <div className="flex items-center mt-2">
+                <span className="w-full h-[1px] bg-[#333333] opacity-35 rounded" />
+                <p className="text-sm px-4">o</p>
+                <span className="w-full h-[1px] bg-[#333333] opacity-35 rounded" />
+              </div>
+
+              <div className="flex gap-2">
+                <CustomLoginButton icon={<FaGoogle size={20}/>} text="Google" />
+                <CustomLoginButton icon={<FaFacebook size={20}/>} text="Facebook" />
+              </div>
             </form>
+            <p className="text-sm text-center mt-4">
+              No tenes cuenta?{" "}
+              <Link
+                to={`/${PublicRoutes.REGISTER}`}
+                replace
+                className="text-primary"
+              >
+                Registrate!
+              </Link>
+            </p>
           </div>
         </div>
       </Navbar>

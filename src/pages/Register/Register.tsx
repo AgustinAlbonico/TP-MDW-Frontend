@@ -8,6 +8,8 @@ import RegisterSchema from "../../models/schemas/register.model";
 import Navbar from "../../components/Navbar";
 import Input from "../../components/InputField";
 
+console.log(import.meta.env.VITE_xd)
+
 const Register = () => {
   const registerValidation: ZodType<RegisterSchema> = z
     .object({
@@ -28,13 +30,13 @@ const Register = () => {
         .string()
         .min(5, "La contraseña debe ser mayor a 5 caracteres")
         .max(30, "La contraseña debe ser menor a 30 caracteres"),
-      profilePicture:   z.instanceof(FileList),
+      profilePicture: z.any(),
       birthdate: z.string().nonempty("La fecha de nacimiento es obligatoria"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Las contraseñas no coinciden",
       path: ["confirmPassword"],
-    });
+    })
 
   const {
     register,
@@ -45,7 +47,7 @@ const Register = () => {
   });
 
   const submitData = (data: RegisterSchema) => {
-    console.log(data.profilePicture)
+    console.log(data)
   };
   return (
     <>
@@ -102,6 +104,7 @@ const Register = () => {
                 {...register("profilePicture")}
                 error={errors.profilePicture?.message}
                 placeholder="Carga tu foto de perfil"
+                accept="image/jpeg,image/jpg,image/png"
               ></Input>
 
               <button type="submit" className="btn-primary">

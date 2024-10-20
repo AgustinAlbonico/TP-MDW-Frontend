@@ -4,7 +4,8 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 interface FieldProps extends HTMLProps<HTMLInputElement> {
   type: "email" | "password" | "text" | "date" | "file";
   error?: string;
-} 
+  accept?: string;
+}
 
 const Input = forwardRef((props: FieldProps, ref: Ref<HTMLInputElement>) => {
   const { placeholder, error, type, ...FieldProps } = props;
@@ -21,7 +22,7 @@ const Input = forwardRef((props: FieldProps, ref: Ref<HTMLInputElement>) => {
           type={type !== "password" ? type : !showPassword ? type : "text"}
           placeholder={placeholder}
           className={`w-full text-sm bg-transparent py-3 mr-3 rounded outline-none bg-black${
-            type === "file" || type === "date" && "cursor-pointer"
+            type === "file" || (type === "date" && "cursor-pointer")
           }`}
           ref={ref}
           {...FieldProps}
