@@ -9,7 +9,7 @@ const App = () => {
       <Suspense
         fallback={
           <main className="w-full h-screen flex justify-center items-center">
-            <SpinnerCircularFixed color="#332B47" />
+            <SpinnerCircularFixed color="#2B85FF" />
           </main>
         }
       >

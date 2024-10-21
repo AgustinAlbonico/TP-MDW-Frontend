@@ -4,7 +4,6 @@ interface RegisterSchema {
   lastname: string;
   password: string;
   confirmPassword: string;
-  profilePicture?: FileList;
   birthdate: string;
 }
 
