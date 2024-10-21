@@ -56,19 +56,21 @@ const Register = () => {
             <form onSubmit={handleSubmit(submitData)}>
               <h4 className="text-2xl mb-7">Registrate</h4>
 
-              <Input
-                type="text"
-                {...register("name")}
-                error={errors.name?.message}
-                placeholder="Nombre"
-              ></Input>
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  {...register("name")}
+                  error={errors.name?.message}
+                  placeholder="Nombre"
+                ></Input>
 
-              <Input
-                type="text"
-                {...register("lastname")}
-                error={errors.lastname?.message}
-                placeholder="Apellido"
-              ></Input>
+                <Input
+                  type="text"
+                  {...register("lastname")}
+                  error={errors.lastname?.message}
+                  placeholder="Apellido"
+                ></Input>
+              </div>
 
               <Input
                 type="email"
