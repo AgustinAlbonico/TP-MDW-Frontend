@@ -5,5 +5,4 @@ export const PublicRoutes = {
 
 export const PrivateRoutes = {
   HOME: "",
-  PROFILE: "profile"
 };

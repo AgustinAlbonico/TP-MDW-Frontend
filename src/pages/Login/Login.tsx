@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import z, { ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,10 +8,19 @@ import Navbar from "../../components/Navbar";
 import LoginSchema from "../../models/schemas/login.model";
 import Field from "../../components/InputField";
 import Input from "../../components/InputField";
-import CustomLoginButton from "../../components/CustomLogin";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
+import axiosInstance from "../../utils/axiosInstance";
+import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import { notifySuccess } from "../../utils/toastFunctions";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
+  const [error, setError] = useState("");
+
+  const { user, login } = useAuth();
+
+  const navigate = useNavigate();
+
   const loginValidation: ZodType<LoginSchema> = z.object({
     email: z.string().email("Email invalido"),
     password: z
@@ -28,9 +37,33 @@ const Login = () => {
     resolver: zodResolver(loginValidation),
   });
 
-  const submitData = (data: LoginSchema) => {
-    console.log(data);
+  useEffect(()=> {
+    if(user) navigate("/")
+  },[])
+
+  const submitData = async (data: LoginSchema) => {
+    try {
+      setError("");
+
+      const response = await axiosInstance.post("/users/login", {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { token, message, user } = response.data;
+
+      localStorage.setItem("token", token);
+      login(user);
+      notifySuccess(message);
+      navigate("/");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error);
+        setError(error.response?.data.message);
+      }
+    }
   };
+
   return (
     <>
       <Navbar>
@@ -67,20 +100,11 @@ const Login = () => {
                 {...register("password")}
               /> */}
 
+              {error && <p className="error-msg pt-0">{error}</p>}
+
               <button type="submit" className="btn-primary">
                 Iniciar sesión
               </button>
-
-              <div className="flex items-center mt-2">
-                <span className="w-full h-[1px] bg-[#333333] opacity-35 rounded" />
-                <p className="text-sm px-4">o</p>
-                <span className="w-full h-[1px] bg-[#333333] opacity-35 rounded" />
-              </div>
-
-              <div className="flex gap-2">
-                <CustomLoginButton icon={<FaGoogle size={20}/>} text="Google" />
-                <CustomLoginButton icon={<FaFacebook size={20}/>} text="Facebook" />
-              </div>
             </form>
             <p className="text-sm text-center mt-4">
               No tenes cuenta?{" "}

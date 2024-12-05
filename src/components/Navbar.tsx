@@ -1,24 +1,69 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { ReactNode, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { FaUser } from "react-icons/fa";
-import { PrivateRoutes } from "../models/routes.model";
 import Footer from "./Footer";
+import SearchBar from "./SearchBar";
+import { useAuth } from "../contexts/AuthContext";
+import { notifySuccess } from "../utils/toastFunctions";
 
-const Navbar = ({ children }: { children: ReactNode }) => {
+const Navbar = ({
+  children,
+  searchNote,
+  handleClearSearch,
+}: {
+  children: ReactNode;
+  searchNote?: (query: string) => Promise<void>;
+  handleClearSearch?: () => void;
+}) => {
+  const { user,logout } = useAuth();
+  const navigate = useNavigate()
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  //Manejador para buscar una nota
+  const handleSearch = async () => {
+    if (searchQuery && searchNote) {
+      await searchNote(searchQuery);
+    }
+  };
+
+  //Manejador para limpiar la busqueda
+  const onClearSearch = () => {
+    if (handleClearSearch) {
+      setSearchQuery("");
+      handleClearSearch();
+    }
+  };
+
+  //Manejador para cerrar sesion
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    logout()
+    navigate("/login")
+    notifySuccess("Sesión cerrada correctamente")
+  };
+
   return (
     <div className="h-screen flex flex-col justify-between">
       <nav className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
         <h2 className="text-xl font-medium text-black py-2">Notas</h2>
 
-        <Link
-          to={`/${PrivateRoutes.PROFILE}`}
-          className="flex items-center gap-2"
-        >
-          Mi cuenta <FaUser className="cursor-pointer text-primary" size={20} />
-        </Link>
+        {user && (
+          <SearchBar
+            value={searchQuery}
+            handleSearch={handleSearch}
+            onClearSearch={onClearSearch}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+          />
+        )}
+
+        {user && <button onClick={handleLogout}>Logout</button>}
       </nav>
+
       {children}
+
       <Footer />
     </div>
   );

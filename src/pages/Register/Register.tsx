@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import z, { ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,10 +7,22 @@ import { PublicRoutes } from "../../models/routes.model";
 import RegisterSchema from "../../models/schemas/register.model";
 import Navbar from "../../components/Navbar";
 import Input from "../../components/InputField";
-
-console.log(import.meta.env.VITE_xd);
+import { useEffect, useState } from "react";
+import { notifySuccess } from "../../utils/toastFunctions";
+import axiosInstance from "../../utils/axiosInstance";
+import { AxiosError } from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Register = () => {
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const {user} = useAuth()
+
+  useEffect(()=> {
+    if(user) navigate("/")
+  },[])
+
   const registerValidation: ZodType<RegisterSchema> = z
     .object({
       email: z.string().email("Email invalido"),
@@ -45,8 +57,28 @@ const Register = () => {
     resolver: zodResolver(registerValidation),
   });
 
-  const submitData = (data: RegisterSchema) => {
-    console.log(data);
+  const submitData = async (data: RegisterSchema) => {
+    try {
+      setError("");
+
+      const response = await axiosInstance.post("/users/register", {
+        name: data.name,
+        lastname: data.lastname,
+        birthdate: data.birthdate,
+        email: data.email,
+        password: data.password,
+      });
+
+      const { message } = response.data;
+
+      notifySuccess(message);
+      navigate("/login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error);
+        setError(error.response?.data.message);
+      }
+    }
   };
   return (
     <>
@@ -99,6 +131,8 @@ const Register = () => {
                 error={errors.confirmPassword?.message}
                 placeholder="Confirmar contraseña"
               ></Input>
+
+              {error && <p className="error-msg pt-0">{error}</p>}
 
               <button type="submit" className="btn-primary">
                 Registrate
