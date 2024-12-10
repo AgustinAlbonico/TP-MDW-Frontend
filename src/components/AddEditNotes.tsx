@@ -23,14 +23,13 @@ const AddEditNotes: FC<AddEditNotesProps> = ({
   getAllNotes,
   noteDetails
 }) => {
-  console.log("recien cargo", type, noteDetails)
-
   const [title, setTitle] = useState(noteDetails?.title || "");
   const [description, setDescription] = useState(noteDetails?.description || "");
   const [tags, setTags] = useState<string[]>(noteDetails?.tags || []);
 
   const [error, setError] = useState<string | null>(null);
 
+  //Conecta con el back para guardar la nota
   const createNote = async () => {
     try {
       const res = await axiosInstance.post("/todos/", {
@@ -49,6 +48,7 @@ const AddEditNotes: FC<AddEditNotesProps> = ({
     }
   };
 
+  //Conecta con el back para edita la nota
   const editNote = async (id: string) => {
     try {
       const res = await axiosInstance.put(`/todos/${id}`, {
@@ -95,12 +95,12 @@ const AddEditNotes: FC<AddEditNotesProps> = ({
 
       <div className="flex flex-col gap-2">
         <label className="input-label" htmlFor="title">
-          TITLE
+          TITULO
         </label>
         <input
           type="text"
           className="text-2xl text-slate-950"
-          placeholder="Go to gym at 5"
+          placeholder="Ir al gimnasio a las 5"
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -108,7 +108,7 @@ const AddEditNotes: FC<AddEditNotesProps> = ({
       </div>
 
       <div className="flex flex-col gap-2 mt-4">
-        <label className="input-label">Descripción</label>
+        <label className="input-label">DESCRIPCIÓN</label>
         <textarea
           className="text-sm text-slate-950 outline-none bg-slate-50 rounded p-2 resize-none"
           placeholder="Descripción"
@@ -119,7 +119,7 @@ const AddEditNotes: FC<AddEditNotesProps> = ({
       </div>
 
       <div className="mt-3">
-        <label className="input-label">TAGS</label>
+        <label className="input-label">ETIQUETAS</label>
         <TagInput tags={tags} setTags={setTags} />
       </div>
 

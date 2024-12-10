@@ -39,7 +39,7 @@ const Login = () => {
 
   useEffect(()=> {
     if(user) navigate("/")
-  },[])
+  },[user])
 
   const submitData = async (data: LoginSchema) => {
     try {

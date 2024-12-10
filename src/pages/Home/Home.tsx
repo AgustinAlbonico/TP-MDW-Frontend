@@ -53,8 +53,8 @@ const Home = () => {
 
   useEffect(() => {
     if (!user) navigate("/login");
-    getAllNotes();
-  }, []);
+    else getAllNotes();
+  }, [user]);
 
   //Traer todas las notas del usuario
   const getAllNotes = async () => {
@@ -80,7 +80,6 @@ const Home = () => {
 
       setNotes(formattedNotes);
     } catch (error) {
-      console.log(error);
       notifyError(
         "Error al traer notas de la base de datos, intente nuevamente"
       );
@@ -154,7 +153,7 @@ const Home = () => {
   //Fijo una nota arriba
   const updateIsPinned = async (id: string, isPinned: boolean) => {
     try {
-      console.log(id, isPinned)
+      console.log(id, isPinned);
       await axiosInstance.put(`/todos/pin-todo/${id}`, {
         isPinned: !isPinned,
       });

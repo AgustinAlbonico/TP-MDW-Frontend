@@ -45,6 +45,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (localStorage.getItem("token") && !user) {
       getUserData();
     }
+    console.log(user)
   }, [user]);
 
   const login = (user: User) => setUser(user);

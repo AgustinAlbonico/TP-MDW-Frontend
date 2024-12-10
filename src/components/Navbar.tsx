@@ -59,7 +59,7 @@ const Navbar = ({
           />
         )}
 
-        {user && <button onClick={handleLogout}>Logout</button>}
+        {user && <button onClick={handleLogout}>Cerrar sesión</button>}
       </nav>
 
       {children}

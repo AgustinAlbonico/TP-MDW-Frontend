@@ -17,11 +17,11 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const {user} = useAuth()
+  const { user } = useAuth();
 
-  useEffect(()=> {
-    if(user) navigate("/")
-  },[])
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user]);
 
   const registerValidation: ZodType<RegisterSchema> = z
     .object({

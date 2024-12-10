@@ -52,7 +52,7 @@ const TagInput: FC<TagInputProps> = ({ tags, setTags }) => {
         <input
           type="text"
           className="text-sm bg-transparent px-3 py-2 rounded outline-none"
-          placeholder="Add tags..."
+          placeholder="Agregar etiquetas..."
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           value={inputValue}
