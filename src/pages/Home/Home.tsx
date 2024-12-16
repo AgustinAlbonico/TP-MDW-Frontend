@@ -71,11 +71,12 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log(openDeleteModal)
     const deleteNote = async () => {
       try {
         if (openDeleteModal.confirm) {
-          const res = await axiosInstance.delete(`/todos/${openDeleteModal.noteId}`);
+          const res = await axiosInstance.delete(
+            `/todos/${openDeleteModal.noteId}`
+          );
 
           notifySuccess(res.data.message);
           getAllNotes();
@@ -164,25 +165,12 @@ const Home = () => {
 
   //Logica para borrar una nota
   const onDelete = async (id: string, noteTitle: string) => {
-    try {
-      setOpenDeleteModal({
-        confirm: false,
-        isShown: true,
-        noteTitle: noteTitle,
-        noteId: id,
-      });
-
-      if (openDeleteModal.confirm) {
-        const res = await axiosInstance.delete(`/todos/${id}`);
-
-        notifySuccess(res.data.message);
-        getAllNotes();
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        notifyError(error.response?.data.message);
-      }
-    }
+    setOpenDeleteModal({
+      confirm: false,
+      isShown: true,
+      noteTitle: noteTitle,
+      noteId: id,
+    });
   };
 
   //Abrir modal con los datos de la nota a editar
@@ -280,7 +268,7 @@ const Home = () => {
         <DeleteNote
           setOpenDeleteModal={setOpenDeleteModal}
           noteTitle={openDeleteModal.noteTitle}
-          noteId = {openDeleteModal.noteId}
+          noteId={openDeleteModal.noteId}
         />
       </Modal>
     </Navbar>
