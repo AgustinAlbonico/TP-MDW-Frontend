@@ -10,6 +10,7 @@ import { notifyError, notifySuccess } from "../../utils/toastFunctions";
 import axiosInstance from "../../utils/axiosInstance";
 import { SpinnerCircularFixed } from "spinners-react";
 import { AxiosError } from "axios";
+import DeleteNote from "../../components/DeleteNote";
 
 export interface INote {
   completed: boolean;
@@ -39,6 +40,13 @@ interface IOpenModal {
   data: INote | null;
 }
 
+interface IOpenDeleteModal {
+  isShown: boolean;
+  confirm: boolean;
+  noteTitle: string;
+  noteId: string;
+}
+
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -50,11 +58,36 @@ const Home = () => {
     type: "add",
     data: null,
   });
+  const [openDeleteModal, setOpenDeleteModal] = useState<IOpenDeleteModal>({
+    confirm: false,
+    isShown: false,
+    noteTitle: "",
+    noteId: "",
+  });
 
   useEffect(() => {
     if (!user) navigate("/login");
     else getAllNotes();
   }, [user]);
+
+  useEffect(() => {
+    console.log(openDeleteModal)
+    const deleteNote = async () => {
+      try {
+        if (openDeleteModal.confirm) {
+          const res = await axiosInstance.delete(`/todos/${openDeleteModal.noteId}`);
+
+          notifySuccess(res.data.message);
+          getAllNotes();
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          notifyError(error.response?.data.message);
+        }
+      }
+    };
+    deleteNote();
+  }, [openDeleteModal]);
 
   //Traer todas las notas del usuario
   const getAllNotes = async () => {
@@ -80,6 +113,7 @@ const Home = () => {
 
       setNotes(formattedNotes);
     } catch (error) {
+      console.log(error);
       notifyError(
         "Error al traer notas de la base de datos, intente nuevamente"
       );
@@ -129,10 +163,16 @@ const Home = () => {
   };
 
   //Logica para borrar una nota
-  const onDelete = async (id: string) => {
+  const onDelete = async (id: string, noteTitle: string) => {
     try {
-      const confirm = window.confirm("Seguro que desea borrar la nota?");
-      if (confirm) {
+      setOpenDeleteModal({
+        confirm: false,
+        isShown: true,
+        noteTitle: noteTitle,
+        noteId: id,
+      });
+
+      if (openDeleteModal.confirm) {
         const res = await axiosInstance.delete(`/todos/${id}`);
 
         notifySuccess(res.data.message);
@@ -153,7 +193,6 @@ const Home = () => {
   //Fijo una nota arriba
   const updateIsPinned = async (id: string, isPinned: boolean) => {
     try {
-      console.log(id, isPinned);
       await axiosInstance.put(`/todos/pin-todo/${id}`, {
         isPinned: !isPinned,
       });
@@ -169,7 +208,7 @@ const Home = () => {
 
   return (
     <Navbar searchNote={searchNote} handleClearSearch={handleClearSearch}>
-      <div className="container mx-auto">
+      <div className="container mx-auto flex flex-col">
         {loading && (
           <SpinnerCircularFixed className="mx-auto" color="#2B85FF" />
         )}
@@ -188,7 +227,7 @@ const Home = () => {
               isPinned={item.isPinned}
               tags={item.tags}
               onDelete={() => {
-                onDelete(item.id);
+                onDelete(item.id, item.title);
               }}
               onEdit={() => handleEdit(item)}
               onPinNote={() => {
@@ -224,6 +263,24 @@ const Home = () => {
           type={openModal.type}
           getAllNotes={getAllNotes}
           noteDetails={openModal.data}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={openDeleteModal.isShown}
+        onRequestClose={() => {}}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)",
+          },
+        }}
+        contentLabel=""
+        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto p-5 overflow-hidden mt-28"
+      >
+        <DeleteNote
+          setOpenDeleteModal={setOpenDeleteModal}
+          noteTitle={openDeleteModal.noteTitle}
+          noteId = {openDeleteModal.noteId}
         />
       </Modal>
     </Navbar>

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
+import { SpinnerCircularFixed } from "spinners-react";
 import AppRouter from "./routes/AppRouter";
 import { ToastContainer } from "react-toastify";
-import { SpinnerCircularFixed } from "spinners-react";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
           </main>
         }
       >
-        <main className="">
+        <main>
           <AppRouter />
           <ToastContainer />
         </main>

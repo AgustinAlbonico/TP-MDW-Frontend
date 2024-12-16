@@ -1,17 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import z, { ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../../contexts/AuthContext";
+import axiosInstance from "../../utils/axiosInstance";
+import { AxiosError } from "axios";
+import { notifySuccess } from "../../utils/toastFunctions";
 
 import { PublicRoutes } from "../../models/routes.model";
 import RegisterSchema from "../../models/schemas/register.model";
 import Navbar from "../../components/Navbar";
 import Input from "../../components/InputField";
-import { useEffect, useState } from "react";
-import { notifySuccess } from "../../utils/toastFunctions";
-import axiosInstance from "../../utils/axiosInstance";
-import { AxiosError } from "axios";
-import { useAuth } from "../../contexts/AuthContext";
 
 const Register = () => {
   const [error, setError] = useState("");

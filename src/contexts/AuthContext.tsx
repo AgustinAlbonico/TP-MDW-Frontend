@@ -45,7 +45,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (localStorage.getItem("token") && !user) {
       getUserData();
     }
-    console.log(user)
   }, [user]);
 
   const login = (user: User) => setUser(user);
@@ -58,6 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
   if (!context) {
