@@ -114,7 +114,6 @@ const Home = () => {
 
       setNotes(formattedNotes);
     } catch (error) {
-      console.log(error);
       notifyError(
         "Error al traer notas de la base de datos, intente nuevamente"
       );
@@ -149,7 +148,6 @@ const Home = () => {
 
       setNotes(formattedNotes);
     } catch (error) {
-      console.log(error);
       notifyError(
         "Error al traer notas de la base de datos, intente nuevamente"
       );

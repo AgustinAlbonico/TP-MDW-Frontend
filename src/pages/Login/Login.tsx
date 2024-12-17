@@ -37,9 +37,9 @@ const Login = () => {
     resolver: zodResolver(loginValidation),
   });
 
-  useEffect(()=> {
-    if(user) navigate("/")
-  },[user])
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user]);
 
   const submitData = async (data: LoginSchema) => {
     try {
@@ -58,12 +58,10 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error);
         setError(error.response?.data.message);
       }
     }
   };
-
   return (
     <>
       <Navbar>
@@ -77,31 +75,13 @@ const Login = () => {
                 error={errors.email?.message}
                 placeholder="Email"
               ></Input>
-              {/* 
-                Cambie este input por un componente separado
-                <input
-                type="email"
-                placeholder="Email"
-                className="input-box"
-                {...register("email")}
-              /> */}
-
               <Field
                 type="password"
                 {...register("password")}
                 error={errors.password?.message}
                 placeholder="Contraseña"
               ></Field>
-
-              {/* <input
-                type="password"
-                placeholder="Contraseña"
-                className="input-box"
-                {...register("password")}
-              /> */}
-
               {error && <p className="error-msg pt-0">{error}</p>}
-
               <button type="submit" className="btn-primary">
                 Iniciar sesión
               </button>

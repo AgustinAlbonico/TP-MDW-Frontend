@@ -10,7 +10,6 @@ interface FieldProps extends HTMLProps<HTMLInputElement> {
 const Input = forwardRef((props: FieldProps, ref: Ref<HTMLInputElement>) => {
   const { placeholder, error, type, ...FieldProps } = props;
   const [showPassword, setShowPassword] = useState(false);
-
   return (
     <>
       <div
